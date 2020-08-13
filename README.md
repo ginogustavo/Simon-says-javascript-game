@@ -1,6 +1,6 @@
 # Simon Says - JavaScript game. 🎮
 
-![img](images/screen.jpg) 
+![img](images/screen.png) 
 
 
 
