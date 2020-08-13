@@ -6,6 +6,12 @@ const btnStart = document.getElementById("btnStart");
 const levelInd = document.getElementById("levelIndicator");
 const gamerInd = document.getElementById("gamerIndicator");
 
+//Sounds
+const sound_do = document.getElementById("sound_do");
+const sound_re = document.getElementById("sound_re");
+const sound_mi = document.getElementById("sound_mi");
+const sound_fa = document.getElementById("sound_fa");
+
 const LAST_LEVEL = 10;
 
 /**
@@ -42,6 +48,30 @@ class Game {
       yellow,
       blue,
     };
+
+    this.sounds = {
+      sound_do,
+      sound_re,
+      sound_mi,
+      sound_fa,
+    };
+  }
+
+  playSound(color) {
+    switch (color) {
+      case "green":
+        this.sounds.sound_do.play();
+        break;
+      case "red":
+        this.sounds.sound_re.play();
+        break;
+      case "yellow":
+        this.sounds.sound_mi.play();
+        break;
+      case "blue":
+        this.sounds.sound_fa.play();
+        break;
+    }
   }
 
   generateSequence() {
@@ -102,6 +132,7 @@ class Game {
     for (let i = 0; i < this.level; i++) {
       //let, the value is kept during this block (for) . Always "const" before "let" before "var"
       const color = this.numberToColor(this.sequence[i]);
+      setTimeout(() => this.playSound(color), 1000 * i);
       setTimeout(() => this.turnOn(color), 1000 * i); // each color turn on first in 0, 2nd in 1sec, etc
     }
   }
@@ -150,7 +181,7 @@ class Game {
     const colorName = event.target.dataset.color;
     const colorNumber = this.colorToNumber(colorName);
     this.turnOn(colorName);
-
+    this.playSound(colorName)
     //Compare color number with sequence in position of subLevel it is in.
     if (colorNumber === this.sequence[this.subLevel]) {
       this.subLevel++;
