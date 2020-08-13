@@ -3,14 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <title>Simon Says</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="sky.css" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/sky.css" />
   </head>
   <body>
     <div class="stars">
       <div class="twinkling">
         <div class="clouds">
-          <div class="gameboard" style="border: 1px solid white;">
+          <div class="gameboard" >
             <!-- attribute data-SOMETHING, is used when we look at Event.target values -->
             <div id="green" class="color green left" data-color="green"></div>
             <div id="red" class="color red right" data-color="red"></div>
@@ -23,8 +23,13 @@
           </div>
           
           <div class="level">
-            Level: 1
+            Level: <span id="levelIndicator">0</span>
           </div>
+
+          <div class="gamerTurn">
+            <span id="gamerIndicator">Let's begin!</span>
+          </div>
+          
 
         </div>
       </div>

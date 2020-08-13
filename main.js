@@ -3,8 +3,10 @@ const red = document.getElementById("red");
 const yellow = document.getElementById("yellow");
 const blue = document.getElementById("blue");
 const btnStart = document.getElementById("btnStart");
+const levelInd = document.getElementById("levelIndicator");
+const gamerInd = document.getElementById("gamerIndicator");
 
-const LAST_LEVEL = 3;
+const LAST_LEVEL = 10;
 
 /**
  * Check documentation of https://sweetalert.js.org/
@@ -23,6 +25,7 @@ class Game {
     //To replace the need to call in each case of chooseColor. this bind will be always we call the function.
     this.chooseColor = this.chooseColor.bind(this);
     this.nextLevel = this.nextLevel.bind(this);
+    // this.nextLevel = this.nextLevel.bind(this);
 
     this.toggleBtnStart();
 
@@ -30,6 +33,7 @@ class Game {
     // btnStart.classList.add("hide");
 
     this.level = 1; // when users make progress level changes
+    levelInd.innerHTML = this.level;
     this.colors = {
       // instead of  red: red  (propertyName: object defined above)
       // Since both have the same name, JS allow us to just use the single name for name and value.
@@ -60,6 +64,7 @@ class Game {
     this.subLevel = 0;
     this.highlightSequence();
     this.addOnclickEvents();
+    // this.labelSimonTurn(false)
   }
 
   numberToColor(num) {
@@ -89,6 +94,11 @@ class Game {
   }
 
   highlightSequence() {
+    this.labelSimonTurn(true); // Change temporalily to Simons label
+    setTimeout(() => {
+      this.labelSimonTurn(false);
+    }, this.level * 1000); // after the iteration change to gamer turn
+
     for (let i = 0; i < this.level; i++) {
       //let, the value is kept during this block (for) . Always "const" before "let" before "var"
       const color = this.numberToColor(this.sequence[i]);
@@ -128,14 +138,14 @@ class Game {
    */
   chooseColor(event) {
     //if we want "this" is the object game. USE bind() when adding event listener
-    console.log(
-      "Seq: " +
-        this.sequence +
-        " | Level: " +
-        this.level +
-        " | SubLevel: " +
-        this.subLevel
-    );
+    // console.log(
+    //   "Seq: " +
+    //     this.sequence +
+    //     " | Level: " +
+    //     this.level +
+    //     " | SubLevel: " +
+    //     this.subLevel
+    // );
 
     const colorName = event.target.dataset.color;
     const colorNumber = this.colorToNumber(colorName);
@@ -146,13 +156,13 @@ class Game {
       this.subLevel++;
       if (this.subLevel === this.level) {
         this.level++;
-        console.log("Got it, go the the next level: " + this.level);
+        levelInd.innerHTML = this.level;
+
         //If user pass next level, remove click events (should not be able to select)
         this.removeClickEvents();
 
         if (this.level === LAST_LEVEL + 1) {
           this.winGame();
-          console.log("Congrats, you won the game");
         } else {
           //if not last level, user has to advance
           // setTimeout(() => this.nextLevel.bind(this), 2000);
@@ -160,8 +170,6 @@ class Game {
         }
       }
     } else {
-      // TODO: Lost!
-      console.log("Lost!, (ToDo: Reset everything)");
       this.loseGame();
     }
   }
@@ -172,7 +180,8 @@ class Game {
   }
 
   loseGame() {
-    swal("Simon Says", "You lost! :(", "error") // it returns a promise
+    let msg = this.getSequence();
+    swal("Simon Says", "You lost! :( \n\n " + msg, "error") // it returns a promise
       .then(() => {
         this.removeClickEvents();
         this.start();
@@ -180,7 +189,14 @@ class Game {
   }
 
   //When lost, show correct sequence until the current level
-  showSequence() {}
+  getSequence() {
+    let str = "Colors: \n";
+    for (let i = 0; i < this.level; i++) {
+      let color = this.numberToColor(this.sequence[i]);
+      str += "-" + color.toUpperCase() + "\n";
+    }
+    return str;
+  }
   //When re-start the game, clean/hide the sequence
   hideSequence() {}
 
@@ -191,6 +207,21 @@ class Game {
       btnStart.classList.remove("hide");
     } else {
       btnStart.classList.add("hide");
+    }
+  }
+
+  labelSimonTurn(value) {
+    if (value) {
+      //turn of Simons
+      gamerInd.classList.remove("yourTurn");
+      gamerInd.classList.add("simonTurn");
+
+      gamerInd.innerHTML = "Simons turns";
+    } else {
+      //Turn of you player
+      gamerInd.classList.remove("simonTurn");
+      gamerInd.classList.add("yourTurn");
+      gamerInd.innerHTML = "Your Turn";
     }
   }
 }
