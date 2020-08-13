@@ -10,7 +10,7 @@
     <div class="stars">
       <div class="twinkling">
         <div class="clouds">
-          <div class="gameboard">
+          <div class="gameboard" style="border: 1px solid white;">
             <!-- attribute data-SOMETHING, is used when we look at Event.target values -->
             <div id="green" class="color green left" data-color="green"></div>
             <div id="red" class="color red right" data-color="red"></div>
@@ -20,12 +20,17 @@
             <button id="btnStart" class="btn-start" onclick="startGame()">
               Start the game!
             </button>
-
           </div>
+          
+          <div class="level">
+            Level: 1
+          </div>
+
         </div>
       </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script src="main.js"></script>
   </body>
 </html>

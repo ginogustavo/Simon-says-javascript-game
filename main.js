@@ -4,26 +4,31 @@ const yellow = document.getElementById("yellow");
 const blue = document.getElementById("blue");
 const btnStart = document.getElementById("btnStart");
 
-const LAST_LEVEL = 10
+const LAST_LEVEL = 3;
+
+/**
+ * Check documentation of https://sweetalert.js.org/
+ * https://cdnjs.com/libraries/sweetalert
+ */
 
 class Game {
   constructor() {
+    this.start = this.start.bind(this);
     this.start();
     this.generateSequence();
-    
     setTimeout(this.nextLevel, 500);
-
-   
   }
 
   start() {
-    //To replace the need to call in each case of chooseColor
+    //To replace the need to call in each case of chooseColor. this bind will be always we call the function.
     this.chooseColor = this.chooseColor.bind(this);
+    this.nextLevel = this.nextLevel.bind(this);
 
-    this.nextLevel = this.nextLevel.bind(this)
+    this.toggleBtnStart();
 
     //Adding 'hide' style, to the classes that the object has.
-    btnStart.classList.add("hide");
+    // btnStart.classList.add("hide");
+
     this.level = 1; // when users make progress level changes
     this.colors = {
       // instead of  red: red  (propertyName: object defined above)
@@ -52,7 +57,7 @@ class Game {
     // )
   }
   nextLevel() {
-    this.subLevel = 0
+    this.subLevel = 0;
     this.highlightSequence();
     this.addOnclickEvents();
   }
@@ -70,18 +75,17 @@ class Game {
     }
   }
 
-  colorToNumber(color){
+  colorToNumber(color) {
     switch (color) {
-        case 'green':
-          return 0;
-        case 'red':
-          return 1;
-        case 'yellow':
-          return 2;
-        case 'blue':
-          return 3;
-      }
-
+      case "green":
+        return 0;
+      case "red":
+        return 1;
+      case "yellow":
+        return 2;
+      case "blue":
+        return 3;
+    }
   }
 
   highlightSequence() {
@@ -112,7 +116,7 @@ class Game {
     this.colors.yellow.addEventListener("click", this.chooseColor);
     this.colors.blue.addEventListener("click", this.chooseColor);
   }
-  removeClickEvents(){
+  removeClickEvents() {
     this.colors.green.removeEventListener("click", this.chooseColor);
     this.colors.red.removeEventListener("click", this.chooseColor);
     this.colors.yellow.removeEventListener("click", this.chooseColor);
@@ -124,33 +128,70 @@ class Game {
    */
   chooseColor(event) {
     //if we want "this" is the object game. USE bind() when adding event listener
-    console.log(event);
-    const colorName = event.target.dataset.color
-    const colorNumber = this.colorToNumber(colorName)
-    this.turnOn(colorName)
-    
+    console.log(
+      "Seq: " +
+        this.sequence +
+        " | Level: " +
+        this.level +
+        " | SubLevel: " +
+        this.subLevel
+    );
+
+    const colorName = event.target.dataset.color;
+    const colorNumber = this.colorToNumber(colorName);
+    this.turnOn(colorName);
+
     //Compare color number with sequence in position of subLevel it is in.
-    if(colorNumber === this.sequence[this.subLevel]){
-        this.subLevel++
-        if( this.subLevel === this.level){
-            this.level++
-            //If user pass next level, remove click events (should not be able to select)
-            this.removeClickEvents()
+    if (colorNumber === this.sequence[this.subLevel]) {
+      this.subLevel++;
+      if (this.subLevel === this.level) {
+        this.level++;
+        console.log("Got it, go the the next level: " + this.level);
+        //If user pass next level, remove click events (should not be able to select)
+        this.removeClickEvents();
 
-            if(this.level === (LAST_LEVEL +1)){
-                // TODO: Win!
-            }else{
-                //if not last level, user has to advance
-                // setTimeout(() => this.nextLevel.bind(this), 2000);
-                setTimeout(this.nextLevel, 1500);
-            }
-
+        if (this.level === LAST_LEVEL + 1) {
+          this.winGame();
+          console.log("Congrats, you won the game");
+        } else {
+          //if not last level, user has to advance
+          // setTimeout(() => this.nextLevel.bind(this), 2000);
+          setTimeout(this.nextLevel, 1500);
         }
-
-    }else{
-        // TODO: Lost!
+      }
+    } else {
+      // TODO: Lost!
+      console.log("Lost!, (ToDo: Reset everything)");
+      this.loseGame();
     }
+  }
 
+  winGame() {
+    swal("Simon Says", "You won!", "success") // it returns a promise
+      .then(this.start);
+  }
+
+  loseGame() {
+    swal("Simon Says", "You lost! :(", "error") // it returns a promise
+      .then(() => {
+        this.removeClickEvents();
+        this.start();
+      });
+  }
+
+  //When lost, show correct sequence until the current level
+  showSequence() {}
+  //When re-start the game, clean/hide the sequence
+  hideSequence() {}
+
+  showCurrentLevel(booleanValue, level) {}
+
+  toggleBtnStart() {
+    if (btnStart.classList.contains("hide")) {
+      btnStart.classList.remove("hide");
+    } else {
+      btnStart.classList.add("hide");
+    }
   }
 }
 
