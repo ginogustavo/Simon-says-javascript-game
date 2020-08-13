@@ -21,6 +21,13 @@ This is the regular Simon Says game, where you follow every button Simons illumi
 ## External libraries:
 Sweet Alert
 
+## Pending tasks:
+* Add a Timer
+* Ask for the user name and show it along with his/her score.
+* Add information Icon about how to play.
+* Add Speaker Icon to turn off/on the beeps.
+* Make it responsive (design)
+* Style the colors to make it a 3D appearance
 
 ## Author ✒️
 Gino Ureta
