@@ -7,7 +7,7 @@
 This game was created by applying fundamental concepts in Javascript and in the Web arena. In the process, I reviewed topics such as Asynchronism, Callbacks, HTML DOM events & Promises.
 
 ## Live demo
-<Play game> : https://giovannihm.github.io/Thanos-Says/
+<Play game> : https://ginogustavo.github.io/SimonSays
 
 
 ## Instructions:
